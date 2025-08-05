@@ -13,9 +13,13 @@ light_pins = [1, 2, 3, 4, 5]         # Red lights
 servo_pin = 6                        # Servo for flag
 buzzer_pin = 7                       # Buzzer
 wifi_led_pin = 9                     # Wi-Fi status LED
+i = 0
 
 # === Setup Outputs ===
 lights = [Pin(pin, Pin.OUT) for pin in light_pins]
+for item in light_pins:
+    Pin(light_pins[i], Pin.OUT)
+    i += 1
 servo = PWM(Pin(servo_pin))
 servo.freq(50)
 buzzer = Pin(buzzer_pin, Pin.OUT)
@@ -91,11 +95,11 @@ def handle_client(conn):
     if path == "/start":
         print("🚦 Starting Race Sequence...")
         for light in lights:
-            light.value(1)
+            light.value(0)
             time.sleep(0.5)
 
         for light in lights:
-            light.value(0)
+            light.value(1)
         buzzer.value(1)
         time.sleep(0.3)
         buzzer.value(0)
