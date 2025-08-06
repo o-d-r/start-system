@@ -127,9 +127,8 @@ def connect_wifi():
     wlan.connect(SSID, PASSWORD)
 
     print("Connecting to Wi-Fi...")
-    blink = True
     while not wlan.isconnected():
-        wifi_led.toggle(blink)
+        wifi_led.toggle()
         time.sleep(0.5)
 
     wifi_led.value(1)
@@ -141,35 +140,35 @@ def parse_request(request, flag: Flag):
     cmd_char = list(cmd)[0]
     
     if cmd_char == 'i':
-        Flag.idle()
+        flag.idle()
         return
     
     elif cmd_char == 's':
-        Flag.start_race()
+        flag.start_race()
         return
     
     elif cmd_char == 'e':
-        Flag.end_race()
+        flag.end_race()
         return
 
 def main():
-    Flag = Flag
+    Gate = Flag
     ip = connect_wifi()
     addr = socket.getaddrinfo(ip, 80)[0][-1]
     s = socket.socket()
     s.bind(addr)
     s.listen(1)
-    Flag.set(90)
+    Gate.set(90)
     
     # === Web Server Loop ===
     while True:
-        cl, addr = sock.accept()
+        cl, addr = s.accept()
         try:
             request = cl.recv(1024).decode()
             print("Request received:")
             print(request)
             if 'GET /startapi?' in request:
-                parse_request(request, Flag)
+                parse_request(request, Gate)
                 cl.send("HTTP/1.1 204 No Content\r\n\r\n")
             else:
                 cl.send("HTTP/1.1 404 Not Found\r\n\r\n")
@@ -177,4 +176,4 @@ def main():
             print("Request error:", e)
         finally:
             cl.close()
-
+main()
