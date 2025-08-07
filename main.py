@@ -24,6 +24,9 @@ LED = 9
 # === Setup Outputs ===
 light1 = Pin(LIGHT1_PIN)
 light2 = Pin(LIGHT2_PIN)
+light3 = Pin(LIGHT3_PIN)
+light4 = Pin(LIGHT4_PIN)
+light5 = Pin(LIGHT5_PIN)
 servo = PWM(Pin(SERVO_PIN))
 servo.freq(50)
 buzzer = Pin(BUZZER_PIN, Pin.OUT)
@@ -58,48 +61,43 @@ class Flag:
         """
         F1 Starting Lights with buzzer every light, wave flag repeatedly for 5 seconds.
         """
-        global LIGHT1_PIN
-        global LIGHT2_PIN
-        global LIGHT3_PIN
-        global LIGHT4_PIN
-        global LIGHT5_PIN
         global flag_waving
         
-        LIGHT1_PIN.off()
+        light1.off()
         buzzer.on()
         time.sleep(0.5)
         buzzer.off()
         time.sleep(0.5)
         
-        LIGHT2_PIN.off()
+        light2.off()
         buzzer.on()
         time.sleep(0.5)
         buzzer.off()
         time.sleep(0.5)
         
-        LIGHT3PIN.off()
+        light3.off()
         buzzer.on()
         time.sleep(0.5)
         buzzer.off()
         time.sleep(0.5)
         
-        LIGHT4_PIN.off()
+        light4.off()
         buzzer.on()
         time.sleep(0.5)
         buzzer.off()
         time.sleep(0.5)
         
-        LIGHT5_PIN.off()
+        light5.off()
         buzzer.on()
         time.sleep(0.5)
         buzzer.off
         time.sleep(random.uniform(0.2, 3.0))
         
-        LIGHT1_PIN.on()
-        LIGHT2_PIN.on()
-        LIGHT3_PIN.on()
-        LIGHT4_PIN.on()
-        LIGHT5_PIN.on()
+        light1.on()
+        light2.on()
+        light3.on()
+        light4.on()
+        light5.on()
         flag_waving = True
         self.wave_repeated()
         buzzer.on()
@@ -114,11 +112,11 @@ class Flag:
         global flag_waving
         flag_waving = False
         buzzer.off()
-        LIGHT1_PIN.on()
-        LIGHT2_PIN.on()
-        LIGHT3_PIN.on()
-        LIGHT4_PIN.on()
-        LIGHT5_PIN.on()
+        light1.on()
+        light2.on()
+        light3.on()
+        light4.on()
+        light5.on()
 
 # === Wi-Fi Connect ===
 def connect_wifi():
@@ -136,18 +134,22 @@ def connect_wifi():
     return wlan.ifconfig()[0]
 
 def parse_request(request, flag: Flag):
-    cmd = split(request, "=")[1]
+    flag = Flag()
+    cmd = request.split("=")[1]
     cmd_char = list(cmd)[0]
     
     if cmd_char == 'i':
+        print("Idling...")
         flag.idle()
         return
     
     elif cmd_char == 's':
+        print("Starting race...")
         flag.start_race()
         return
     
     elif cmd_char == 'e':
+        print("Ending race...")
         flag.end_race()
         return
 
@@ -163,17 +165,14 @@ def main():
     # === Web Server Loop ===
     while True:
         cl, addr = s.accept()
-        try:
-            request = cl.recv(1024).decode()
-            print("Request received:")
-            print(request)
-            if 'GET /startapi?' in request:
-                parse_request(request, Gate)
-                cl.send("HTTP/1.1 204 No Content\r\n\r\n")
-            else:
-                cl.send("HTTP/1.1 404 Not Found\r\n\r\n")
-        except Exception as e:
-            print("Request error:", e)
-        finally:
-            cl.close()
+        request = cl.recv(1024).decode("utf-8")
+        print("Request received:")
+        print(request)
+        if 'GET /startapi?' in request:
+            parse_request(request, Gate)
+            cl.send("HTTP/1.1 204 No Content\r\n\r\n")
+        else:
+            cl.send("HTTP/1.1 404 Not Found\r\n\r\n")
+        cl.close()
 main()
+
