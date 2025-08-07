@@ -6,11 +6,11 @@ IP = "10.10.20.66"
 
 def send_cmd(command):
     url = f"http://{IP}/startapi?{command}"
-        try:
-            response = requests.get(url, timeout=10)
-            print(f"Sent: {command} | Status: {response.status_code}")
-        except Exception as e:
-            print(f"Failed to send: {command} | Error: {e}")
+    try:
+        response = requests.get(url, timeout=10)
+        print(f"Sent: {command} | Status: {response.status_code}")
+    except Exception as e:
+        print(f"Failed to send: {command} | Error: {e}")
 
 def main() -> None:
     last_cmd = None
@@ -25,7 +25,7 @@ def main() -> None:
         elif input == 'e':
             send_cmd("cmd=end")
         else:
-            throw InputError
+            print("ERROR: Invalid Input! Please enter either 's', 'i', or 'e'")
     last_cmd = input
     time.sleep(0.05)
 
