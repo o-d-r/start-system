@@ -8,8 +8,8 @@ This repository contains all files related to the starting system of the Tail Gr
 
 # File Structure
 
-`control_flag.py  # <- Runs in terminal
-`main.py          # <- Runs on Pico (upload with Thonny)
+`control_flag.py  # <- Runs in terminal` \
+`main.py          # <- Runs on Pico (upload with Thonny)`
 
 # Contributors
 
