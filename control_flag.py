@@ -16,17 +16,17 @@ def main() -> None:
     last_cmd = None
     print("Keyboard Start Gate Control Started")
     print("S = Start\nI = Idle\nE = End")
-    input = list(input().strip().lower())[0]
-    if input != last_cmd:    
-        if input == 's':
+    cmd = list(input().strip().lower())[0]
+    if cmd != last_cmd:    
+        if cmd == 's':
             send_cmd("cmd=start")
-        elif input == 'i':
+        elif cmd == 'i':
             send_cmd("cmd=idle")
-        elif input == 'e':
+        elif cmd == 'e':
             send_cmd("cmd=end")
         else:
             print("ERROR: Invalid Input! Please enter either 's', 'i', or 'e'")
-    last_cmd = input
+    last_cmd = cmd
     time.sleep(0.05)
 
 if __name__ == "__main__":
