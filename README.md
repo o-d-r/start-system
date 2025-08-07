@@ -11,6 +11,6 @@ main.py          # <- Runs on Pico (upload with Thonny)
 
 ## Contributors
 
-Aidan McMillan (@arduinohatesme, @launchpadinc-ai)
-Miles Carpenter (@Modulator-3030)
+Aidan McMillan (@arduinohatesme, @launchpadinc-ai) \
+Miles Carpenter (@Modulator-3030) \
 Keshav Bansal (@o-d-r)
